@@ -1,9 +1,11 @@
 const countdown = (n)=>{
-	const decrement = (n)=>{
-		if (n === 0)
+	const timer =	setInterval(()=>{
+		console.log(n--);
+		if (n === 0){
 			console.log("DONE!")
-		else
-			console.log(--n)
-	}
-	setTimeout(decrement, 1000)
+			clearTimeout(timer);
+		}
+
+	}, 1000);
 }
+countdown(10);
