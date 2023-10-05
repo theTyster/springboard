@@ -9,8 +9,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
 	const page = {
 		form: select("form"),
 		input: select("input"),
-		formButton: select(".form-button"),
+		formButton: select("button.form-button"),
 		list: select("ul"),
+		deleter: select("button.delete-all"),
 	}
 
 	//Objects/arrays
@@ -24,6 +25,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 	//creates elements and adds to the dom
 	let createTodoItem = (item, {index=++itemEvents}={})=>{
+
 		let li = newEl("li");
 		let p = newEl("p");
 		let deleteBtn = newEl("button");
@@ -51,6 +53,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
 		localStorage.setItem("items", JSON.stringify(storage));
 		localStorage.setItem("itemEvents", itemEvents);
 	}
+
+	let deleteItems = ()=>{
+		localStorage.clear();
+	}
+
+	page.deleter.addEventListener("click", deleteItems)
 
 	// checks localstorage
 	if (localStorage.getItem("items")){
