@@ -5,12 +5,12 @@
   border-radius: 10px;
   margin: 5px;
   display: inline-block;
-  filter: grayscale() contrast(20%);
+  filter: grayscale() contrast(0%);
   transition: filter .5s;
 }
 
 #game img:hover{
-  filter: grayscale() contrast(20%) drop-shadow(7px 7px 10px black);
+  filter: grayscale() contrast(0%) drop-shadow(7px 7px 10px black);
 }
 
 #game {
