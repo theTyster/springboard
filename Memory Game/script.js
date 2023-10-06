@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
   const newElem = (elem)=>document.createElement(elem);
   const select = (elem)=> document.querySelector(elem);
   const selectAll = (elem)=> document.querySelectorAll(elem);
-  const sleep = (s) => new Promise((r)=> setTimeout(()=> r(), s *100));
+  const sleep = (s) => new Promise((r)=> setTimeout(()=> r(), s *1000));
   const shuffle = (array)=>{
     let count = array.length;
     while(count){
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
               undefined;
             }
             else if (second.style.filter === "none"){
-              first.style.filter = "grayscale() contrast(0%)";
+              first.style.filter = "";
               console.log("You did not do it.")
               page.gameContainer.removeEventListener("click",  handleSecondCardClick);
               page.gameContainer.addEventListener("click", handleFirstCardClick);
@@ -84,9 +84,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
                   }
                 }
                 if (foundImages === 16){
-                  select("div.confetti").style.display = "flex";
+                  select(".confetti").style.display = "flex";
                   for (let confetti in pinata){
-                    select("div.confetti").append(pinata[confetti]);
+                    select(".confetti").append(pinata[confetti]);
                     pinata[confetti].setAttribute("width", 20);
                     pinata[confetti].setAttribute("height", 20);
                     let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -95,20 +95,17 @@ document.addEventListener("DOMContentLoaded", ()=>{
                     pinata[confetti].append(path);
 
                     //Styles
-                    //pinata[confetti].style.position = "absolute";
-                    pinata[confetti].style.top = 0;
                     pinata[confetti].style.flex = 1;
                     setInterval(()=>{
                       path.style.fill = shimmer();
-                      pinata[confetti].style.top++;
                     }, 1300);
                   }
                 }
                   console.log("you did it!")
                 }
                 else{
-                  first.style.filter = "grayscale() contrast(0%)";
-                  second.style.filter = "grayscale() contrast(0%)";
+                  first.style.filter = "";
+                  second.style.filter = "";
                   console.log("You did not do it.")
                 }
 
