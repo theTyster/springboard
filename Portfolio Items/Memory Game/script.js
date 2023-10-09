@@ -72,35 +72,34 @@ document.addEventListener("DOMContentLoaded", ()=>{
                   first.style.filter = "none";
                   second.style.filter = "none";
 
-                //COMPLETION CELEBRATION.
-                let foundImages = 0;
-                let pinata = {};
-                pinata[foundImages] = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                pinata[foundImages + 16] = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                pinata[foundImages + 32] = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                for (let image of page.images){
-                  if (image.style.filter === "none"){
-                    foundImages++;
+                  //COMPLETION CELEBRATION.
+                  let foundImages = 0;
+                  let pinata = {};
+                  pinata[foundImages] = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                  pinata[foundImages + 16] = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                  pinata[foundImages + 32] = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                  for (let image of page.images){
+                    if (image.style.filter === "none")
+                      foundImages++;
                   }
-                }
-                if (foundImages === 16){
-                  select(".confetti").style.display = "flex";
-                  for (let confetti in pinata){
-                    select(".confetti").append(pinata[confetti]);
-                    pinata[confetti].setAttribute("width", 20);
-                    pinata[confetti].setAttribute("height", 20);
-                    let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                  if (foundImages === 16){
+                    select(".confetti").style.display = "flex";
+                    for (let confetti in pinata){
+                      select(".confetti").append(pinata[confetti]);
+                      pinata[confetti].setAttribute("width", 20);
+                      pinata[confetti].setAttribute("height", 20);
+                      let path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 
-                    path.setAttribute("d", `m0,0 l0,${Math.random() * 20 + 2} l${Math.random() * 20 + 2},${Math.random() * (-10) - 1} z`);
-                    pinata[confetti].append(path);
+                      path.setAttribute("d", `m0,0 l0,${Math.random() * 20 + 2} l${Math.random() * 20 + 2},${Math.random() * (-10) - 2} z`);
+                      pinata[confetti].append(path);
 
-                    //Styles
-                    pinata[confetti].style.flex = 1;
-                    setInterval(()=>{
-                      path.style.fill = shimmer();
-                    }, 1300);
+                      //Styles
+                      pinata[confetti].style.flex = 1;
+                      setInterval(()=>{
+                        path.style.fill = shimmer();
+                      }, 1300);
+                    }
                   }
-                }
                   console.log("you did it!")
                 }
                 else{
