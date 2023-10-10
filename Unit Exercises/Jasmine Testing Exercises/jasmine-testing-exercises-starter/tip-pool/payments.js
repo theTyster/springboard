@@ -1,9 +1,9 @@
-let billAmtInput = document.getElementById('billAmt');
-let tipAmtInput = document.getElementById('tipAmt');
-let paymentForm = document.getElementById('paymentForm');
+const billAmtInput = document.getElementById('billAmt');
+const tipAmtInput = document.getElementById('tipAmt');
+const paymentForm = document.getElementById('paymentForm');
 
-let paymentTbody = document.querySelector('#paymentTable tbody');
-let summaryTds = document.querySelectorAll('#summaryTable tbody tr td');
+const paymentTbody = document.querySelector('#paymentTable tbody');
+const summaryTds = document.querySelectorAll('#summaryTable tbody tr td');
 
 let allPayments = {};
 let paymentId = 0;
@@ -36,7 +36,7 @@ function createCurPayment() {
   let billAmt = billAmtInput.value;
   let tipAmt = tipAmtInput.value;
 
-  if (billAmt === '' || tipAmt === '') return;
+  if (billAmt === '' || tipAmt === '') return undefined;
 
   if (Number(billAmt) > 0 && Number(tipAmt) >= 0) {
     return {
