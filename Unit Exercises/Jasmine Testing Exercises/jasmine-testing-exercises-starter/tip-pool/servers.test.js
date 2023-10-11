@@ -1,8 +1,6 @@
 describe("SubmitServerInfo()", function() {
   beforeEach(function() {
-    // initialization logic
     serverNameInput.value = 'Test';
-
     submitServerInfo();
   });
 
