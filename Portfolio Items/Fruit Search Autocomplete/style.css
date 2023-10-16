@@ -1,21 +1,60 @@
-* {
-  /* box-sizing: border-box; */
-}
-
-:focus {
- /* TODO */
-}
-
 body {
-  /* TODO */
+  background: conic-gradient(at 50% 120%, #98e698, 30deg, #d0aaf3, 120deg, #ffb1a3, 330deg, #98e698);
+  min-height: 100vh;
+  position: relative;
+}
+
+.vcontainer{
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+}
+
+.vflex-items {
+  flex: 1;
+}
+
+.container, search-container{
+  display: flex;
+}
+.flex-items{
+  flex: 1;
+}
+
+img.strawberry-img {
+  height:400px;
+}
+.watermelon-img, .orange-img {
+  opacity: 0;
+  height: 200px;
+  transition: filter .1s;
+}
+
+.watermelon-img:hover, .orange-img:hover{
+  filter: drop-shadow(2px 2px 5px black);
+}
+.watermelon-img:active, .orange-img:active{
+  filter: none;
 }
 
 input {
- /* TODO */
+  text-align:center;
+  padding: 7px;
+  border-radius: 7px;
+  border: 2px solid tomato;
+  transition: all 1s;
+  position: relative;
+  top: -170px;
+}
+
+input:focus{
+  min-width: 200px;
+  top: -400px;
 }
 
 .search-container {
- /* TODO */
+  display: flex;
+  flex-direction: column;
 }
 .search-container input,
 .search-container .suggestions {
@@ -43,4 +82,32 @@ ul li:hover {
 
 input {
    /* TODO */
+}
+
+@media only screen and (max-width:600px){
+  body {
+    background: conic-gradient(at 50% 150%, #98e698, 20deg, #d0aaf3, 120deg, #ffb1a3, 350deg, #98e698);
+  }
+  img.strawberry-img {
+    height:200px;
+  }
+  .watermelon-img, .orange-img {
+    height: 100px;
+  }
+  input {
+    top: 0;
+  }
+  input:focus{
+    top: -180px;
+  }
+}
+
+.noscript {
+  position: absolute;
+  top: 30%;
+  width: 100%;
+  padding: 50px;
+  text-align: center;
+  background: darkred;
+  color:white;
 }
