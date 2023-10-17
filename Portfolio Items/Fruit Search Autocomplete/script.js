@@ -6,18 +6,18 @@ const orange = document.querySelector(".orange-sub-container");
 const dontUnclick = ["fruit-search flex-items", "orange-img flex-items", "watermelon-img flex-items", "suggestion", "watermelon-link-text flex-items", "orange-link-text flex-items"];
 
 
-//STYLING
+//STYLING CLICKS
 const clickInput = ()=>{
 	fruitContainer.map(e=> e.style.opacity = 1);
 	input.focus();
-	if(window.visualViewport.width < 600)
-		input.style.top = "-270px";
-	else
-		input.style.top = "-400px";
+
+	if(window.visualViewport.width < 600) input.style.top = "-270px";
+	else input.style.top = "-400px";
 
 	input.style.minWidth = "200px";
 	document.addEventListener("click", unclickAnywhere, {once:true});
 }
+
 const unclickAnywhere = event =>{
 	if(dontUnclick.every(elem=> event.target.className !== elem)){
 		fruitContainer.map(e=>e.style.opacity = 0);
@@ -33,7 +33,7 @@ const unclickAnywhere = event =>{
 }
 
 
-//SEARCH FUNCTIONALITY
+//AUTOCOMPLETE FUNCTIONALITY
 const search = str => fruit.filter(elem => elem.toLowerCase().includes(str.toLowerCase()));
 const autoCompleteHandler = (event) => {
 	//STYLING
@@ -56,16 +56,19 @@ const autoCompleteHandler = (event) => {
 	})
 }
 
+
 //FILL INPUT WITH SELECTED SUGGESTION
 const useSuggestion = event=> {
 	input.value = event.target.innerText;
 	input.focus();
 }
 
+
 //DIRECT TO WIKIPEDIA OR OPEN FOOD FACTS
 const querySearch = event=> {
 	event.target.className.match("watermelon")? window.open(`https://en.wikipedia.org/w/index.php?search=${input.value}`, "_blank"):window.open(`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${input.value}`, "_blank");
 }
+
 
 input.addEventListener("click", clickInput, {once:true});
 input.addEventListener('keyup', autoCompleteHandler);
