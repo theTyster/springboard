@@ -27,7 +27,7 @@ img.strawberry-img {
 .watermelon-img, .orange-img {
   opacity: 0;
   height: 200px;
-  transition: filter .1s;
+  transition: filter .1s, opacity 1s;
 }
 
 .watermelon-img:hover, .orange-img:hover{
@@ -44,12 +44,8 @@ input {
   border: 2px solid tomato;
   transition: all 1s;
   position: relative;
-  top: -170px;
-}
-
-input:focus{
-  min-width: 200px;
-  top: -400px;
+  min-width: 0;
+  top: 0;
 }
 
 .search-container {
@@ -93,12 +89,6 @@ input {
   }
   .watermelon-img, .orange-img {
     height: 100px;
-  }
-  input {
-    top: 0;
-  }
-  input:focus{
-    top: -180px;
   }
 }
 
