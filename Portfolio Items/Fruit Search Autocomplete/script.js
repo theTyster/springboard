@@ -11,8 +11,8 @@ const clickInput = ()=>{
 	fruitContainer.map(e=> e.style.opacity = 1);
 	input.focus();
 
-	if(window.visualViewport.width < 600) input.style.top = "-270px";
-	else input.style.top = "-400px";
+	//If window is less than 600 do nothing. Otherwise move the input up.
+	(window.visualViewport.width < 600)||(()=>input.style.top = "-360px")();
 
 	input.style.minWidth = "200px";
 	document.addEventListener("click", unclickAnywhere, {once:true});
@@ -23,7 +23,7 @@ const unclickAnywhere = event =>{
 		fruitContainer.map(e=>e.style.opacity = 0);
 		input.blur();
 		input.style.minWidth = "0";
-		input.style.top = "0";
+		input.style.top = "40px";
 		input.addEventListener("click", clickInput, {once:true});
 		Array.from(suggestions.children).map(e=>e.remove()); //remove all previous suggestions.
 	}

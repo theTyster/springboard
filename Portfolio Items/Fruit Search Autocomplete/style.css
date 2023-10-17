@@ -72,7 +72,7 @@ input {
   transition: all 1s;
   position: relative;
   min-width: 0;
-  top: 0;
+  top: 40px;
 }
 
 .search-container {
