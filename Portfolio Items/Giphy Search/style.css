@@ -8,6 +8,11 @@ h1 {
   margin: 50px;
 }
 
+.error {
+  color: red;
+  font-size: 16pt;
+}
+
 .container {
   display: flex;
 }
