@@ -25,7 +25,7 @@ class Story {
 
   getHostName() {
     //It works. Trust me.
-    return this.url.match(/((?<=http:\/\/)|(?<=https:\/\/)).*?(?=\/)(?=\/)/mg);
+    return this.url,this.url.match(/(https?:\/\/)((\w+\.)+\w+)/iu)[2];
   }
 }
 

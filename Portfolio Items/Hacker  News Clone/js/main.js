@@ -6,7 +6,6 @@ const $body = $("body");
 
 const $storiesLoadingMsg = $("#stories-loading-msg");
 const $allStoriesList = $("#all-stories-list");
-const $favoriteCheckboxes = $("input.favorite-box");
 
 const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");

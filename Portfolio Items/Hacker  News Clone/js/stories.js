@@ -19,12 +19,11 @@ async function getAndShowStoriesOnStart() {
  */
 
 function generateStoryMarkup(story) {
-  // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
   return $(`
       <li id="${story.storyId}">
-        <input type="checkbox" class="favorite-box">
+        <input type='checkbox' class='favorite-box'>
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
@@ -33,6 +32,15 @@ function generateStoryMarkup(story) {
         <small class="story-user">posted by ${story.username}</small>
       </li>
     `);
+}
+
+/** Gets Favorites */
+
+const favoriteStories = [];
+
+function addFavoriteStory(evt){
+  console.debug("favorite added", evt)
+
 }
 
 /** Gets list of stories from server, generates their HTML, and puts on page. */
@@ -44,13 +52,13 @@ function putStoriesOnPage() {
 
   // loop through all of our stories and generate HTML for them
   for (let story of storyList.stories) {
-    const $story = generateStoryMarkup(story);
+    const $story =  generateStoryMarkup(story);
     $allStoriesList.append($story);
   }
 
   $allStoriesList.show();
 
-  $favoriteCheckboxes.on("change", addFavorite);
+  $("input.favorite-box").on("change", addFavoriteStory);
 }
 
 /** Takes user input and sends it to backend. */
