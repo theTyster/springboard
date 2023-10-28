@@ -53,6 +53,8 @@ async function showFavoriteStories(evt) {
 
 $navFavorites.on("click", showFavoriteStories);
 
+/** When "owned" is clicked in the navbar, it shows the user all stories that they have created.*/
+
 async function showOwnedStories(evt) {
   console.debug("showOwned", evt)
   const ownedStories = await currentUser.ownStories.map(e=> new Story(e));
