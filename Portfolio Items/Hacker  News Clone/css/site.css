@@ -1,8 +1,15 @@
 /* General typography */
 
+html{
+  height:100%;
+  margin: 0;
+}
+
 body {
   font-family: Arimo, sans-serif;
-  margin: 8px 7.5vw;
+  margin: 8vh 7.5vw;
+  background: radial-gradient(orchid, #95bae8);
+  height: 100%;
 }
 
 h1 {
