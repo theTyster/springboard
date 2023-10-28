@@ -45,7 +45,15 @@ async function signup(evt) {
 
   // User.signup retrieves user info from API and returns User instance
   // which we'll make the globally-available, logged-in user.
-  currentUser = await User.signup(username, password, name);
+  try{
+    currentUser = await User.signup(username, password, name);
+  }
+  catch{
+    $signupForm.trigger("reset");
+    $('nav').after("<p class='error-msg'>Unable to create user. Check your connection and perhaps try a different username.</p>")
+    setTimeout(()=> $("p.error-msg").remove(), 5000);
+    return;
+  }
 
   saveUserCredentialsInLocalStorage();
   updateUIOnUserLogin();
