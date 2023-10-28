@@ -25,7 +25,7 @@ class Story {
 
   getHostName() {
     //It works. Trust me.
-    return this.url,this.url.match(/(https?:\/\/)((\w+\.)+\w+)/iu)[2];
+    return this.url.match(/(\w+\.\w+)(:\w+)?(?=(\/)|$)/i)[0];
   }
 }
 
@@ -48,10 +48,6 @@ class StoryList {
    */
 
   static async getStories() {
-    // Note presence of `static` keyword: this indicates that getStories is
-    //  **not** an instance method. Rather, it is a method that is called on the
-    //  class directly. Why doesn't it make sense for getStories to be an
-    //  instance method?
 
     // query the /stories endpoint (no auth required)
     const response = await axios({
@@ -64,6 +60,15 @@ class StoryList {
 
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
+  }
+
+  /** get one SINGULAR story from API using a story ID */
+
+  static async getStory(id){
+    return axios({
+      url: `${BASE_URL}/stories/${id}`,
+      method: 'get',
+    })
   }
 
   /** Adds story data to API, makes a Story instance, adds it to story list.
@@ -85,12 +90,38 @@ class StoryList {
     }
 
     const response = await axios(config);
-
     const addedStory = new Story(response.data.story);
 
+
     storyList.stories.unshift(addedStory);
+    user.ownStories.unshift(addedStory);
 
     return addedStory;
+  }
+
+  /** Sends story data to API for deletion, makes a Story instance, removes it from the story list.
+   * - user - the current instance of User who will delete the story.
+   * - id - the id of the story for deletion.
+   *
+   * Returns the new Story instance
+   */
+
+  static async delStory(user, id){
+    const token = user.loginToken;
+
+    const config = {
+      url: `${BASE_URL}/stories/${id}`,
+      method: 'delete',
+      data: {token},
+    }
+
+    const response = await axios(config);
+    const removedStory = new Story(response.data.story);
+
+    storyList.stories = storyList.stories.filter(e=> e.storyId !== id);
+    user.ownStories = user.ownStories.filter(e=> e.storyId !== id);
+
+    return removedStory;
   }
 }
 
@@ -208,5 +239,23 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  /** Get/set/delete favorited stories of a user.
+   *  -method: string specifying the API method.
+   *  -user: User Object.
+   *  -storyid: string of the story id.
+   */
+
+  static async doFavorite(method, user, storyid){
+    const username = user.username;
+    const token = user.loginToken;
+    return axios({
+      url: `${BASE_URL}/users/${username}/favorites/${storyid}`,
+      method: method,
+      data:{
+        token,
+        },
+    });
   }
 }

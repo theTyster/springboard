@@ -25,6 +25,7 @@ async function login(evt) {
 
   saveUserCredentialsInLocalStorage();
   updateUIOnUserLogin();
+  
   $loginForm.hide();
   $signupForm.hide(
   );

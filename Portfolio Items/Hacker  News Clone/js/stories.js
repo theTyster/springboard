@@ -34,16 +34,47 @@ function generateStoryMarkup(story) {
     `);
 }
 
-/** Gets Favorites */
+/** Sets or removes favorites depending on the event. */
 
-const favoriteStories = [];
+async function modifyFavoriteStories(evt){
+  let response;
 
-function addFavoriteStory(evt){
-  console.debug("favorite added", evt)
+  if (evt.target.checked){
+    try{
+      response = 
+        await User.doFavorite(
+          'post',
+          currentUser, 
+          evt.target.parentElement.id
+        );
+    }
+    catch{
+      $('nav').after("<p class='error-msg'>Couldn't add Favorite. Please, try again. </p>")
+      setTimeout(()=> $("p.error-msg").remove(), 5000);
+    }
+  }
+  else{
+    try{
+      response = 
+        await User.doFavorite(
+          'delete',
+          currentUser,
+          evt.target.parentElement.id
+        )
+    }
+    catch{
+      $('nav').after("<p class='error-msg'>Couldn't remove Favorite. Please, try again. </p>")
+      setTimeout(()=> $("p.error-msg").remove(), 5000);
+    }
+  }
+  const favoritesArrResponse = response.data.user.favorites
+  currentUser.favorites = favoritesArrResponse;
+  console.debug("favorites modified", currentUser.favorites);
 
 }
 
-/** Gets list of stories from server, generates their HTML, and puts on page. */
+/** Gets list of stories from server, generates their HTML, and puts on page. 
+  * - default param is $allStoriesList */
 
 function putStoriesOnPage() {
   console.debug("putStoriesOnPage");
@@ -54,11 +85,15 @@ function putStoriesOnPage() {
   for (let story of storyList.stories) {
     const $story =  generateStoryMarkup(story);
     $allStoriesList.append($story);
+
+    if (currentUser) {
+      markFavoriteStories(story);
+    }
   }
 
   $allStoriesList.show();
 
-  $("input.favorite-box").on("change", addFavoriteStory);
+  $("input.favorite-box").on("change", modifyFavoriteStories);
 }
 
 /** Takes user input and sends it to backend. */
@@ -93,3 +128,24 @@ async function submitStoriesToAPI(evt){
 }
 
 $submissionForm.on("submit", submitStoriesToAPI);
+
+/** Checks stories to determine if any of them are favorites.
+ *  Marks them if necessary. */
+
+function markFavoriteStories(story){
+  const storyId = story.storyId;
+  const favoritesIds = currentUser.favorites.map(f=> f.storyId);
+
+  if(favoritesIds.includes(storyId)) $(`#${storyId}`).children("input").prop("checked", true);
+}
+
+/** handles event for removing stories */
+async function removeOwnedStories(evt){
+  console.debug("remove story", evt);
+  const storyId = evt.target.parentElement.id;
+
+  const removedStory = await StoryList.delStory(currentUser, storyId);
+
+  $(`#${removedStory.storyId}`).remove();
+  
+}

@@ -15,6 +15,8 @@ const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
 const $navSubmit = $("#nav-submit");
+const $navFavorites = $("#nav-favorites");
+const $navOwned = $("#nav-owned");
 
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
@@ -26,6 +28,7 @@ function hidePageComponents() {
     $allStoriesList,
     $loginForm,
     $signupForm,
+    $submissionForm,
   ];
   components.forEach(c => c.hide());
 }
@@ -50,3 +53,4 @@ console.warn("HEY STUDENT: This program sends many debug messages to" +
   " seeing those helpful debug messages. In your browser console, click on" +
   " menu 'Default Levels' and add Verbose");
 $(start);
+
