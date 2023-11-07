@@ -33,7 +33,7 @@ class WordFinder:
 
 class SpecialWordFinder(WordFinder):
     """
-    A special Word Finder for special people.
+    Ignores empty lines and lines that have been commented out.
     """
     def __init__(self, file):
         super().__init__(file)
