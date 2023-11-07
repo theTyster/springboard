@@ -2,33 +2,40 @@ from random import random
 class WordFinder:
     """
     Word Finder: finds random words from a dictionary.
-    >>> wf = WordFinder("words.txt")
-    3 words read
+    >>> wf = WordFinder("test_files/words.txt")
 
-    >>> wf.random()
+    >>> wf.getrandom()
+    3 random words read
+    
+    >>> len(wf.random_words)
+    3
 
-    >>> wf.random()
-
-    >>> wf.random()
-
-    >>> wf.random()
     """
+
+
     def __init__(self, file):
         self.file = file
         self.words = []
 
-    def random(self, num_words=3):
+        with open(self.file, 'r', encoding='utf8') as r:
+            self.words = r.readlines()
+            self.words = [word.strip('\n') for word in self.words]
+
+
+    def getrandom(self, num_words=3):
         """
         Gets a set number of words randomly from the file.
         """
+        random_words = []
+        random_words = [self.words[int(random() * len(self.words))] for i in range(num_words)]
 
-        self.words = []
+        return random_words
 
-        with open(self.file, 'r', encoding='utf8') as r:
-            lines = r.readlines()
-            num_lines = len(lines)
+class SpecialWordFinder(WordFinder):
+    """
+    A special Word Finder for special people.
+    """
+    def __init__(self, file):
+        super().__init__(file)
 
-            self.words = [lines[int(random() * num_lines)] for i in range(num_words)]
-            self.words = [word.strip('\n') for word in self.words]
-
-        return f'{num_words} words read'
+        self.words = [word for word in self.words if word and word.find('#') == -1 ]
