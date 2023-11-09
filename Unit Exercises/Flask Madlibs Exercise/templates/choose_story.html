@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+
+{% block content %}
+
+<form action="/form">
+	<select id="story_choice" name="story_choice">
+	{% for story in story_options %}
+		<option value="{{ story }}">{{ story }}</option>
+	{% endfor %}
+	</select>
+	<button>Choose</button>
+</form>
+
+{% endblock %}
