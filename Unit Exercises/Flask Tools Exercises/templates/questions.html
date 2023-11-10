@@ -1,0 +1,15 @@
+{% extends 'root.html' %}
+
+{% block content %}
+<form action="{{ question_num + 1}}" method='POST'>
+	<fieldset>
+		<legend>{{question['q']}}</legend>
+		{% for choice in question['choices'] %}
+		<label for="{{choice}}">{{choice}}</label>
+		<input type="radio" id="{{choice}}" name="answer" value="{{choice}}">
+		<br>
+		{% endfor %}
+		<button>Submit</button>
+	</fieldset>
+</form>
+{% endblock %}
