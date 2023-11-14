@@ -5,7 +5,9 @@ from flask import (
     request,
     abort,
     redirect,
-    flash
+    flash,
+    make_response,
+    session
 )
 from flask_debugtoolbar import DebugToolbarExtension
 from surveys import surveys
@@ -16,49 +18,48 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
-# AS QUESTIONS ARE ANSWERED, THEY GET STORED HERE.
-responses = []
-
-s_survey = surveys['satisfaction'] # start with this one.
-p_survey = surveys['personality']
+s_survey = surveys['satisfaction']
+#p_survey = surveys['personality']
 
 @app.route('/')
 def start_page():
+    """
+    The route that begins the survey
+    """
     title = s_survey.title
     instructions = s_survey.instructions
     return render_template('survey_title.html', title=title, instructions=instructions)
 
-@app.route('/question/<int:question_num>', methods=['GET'])
+
+@app.route('/question/<int:question_num>', methods=['GET', 'POST'])
 def get_question_pages(question_num):
-    print(responses, question_num, len(responses))
+    """
+    Route which handles each question.
+    """
 
-    if len(responses) == question_num:
-        try:
-            title = s_survey.title
-            current = s_survey.questions[question_num]
-            question = {
-                'q': current.question,
-                'choices': current.choices,
-            }
-            return render_template('questions.html',
-                question_num=question_num,
-                title=title,
-                question=question,
-            )
-        except IndexError:
-            return redirect('/thanks')
-    else:
-        flash('Question out of order')
-        return redirect(f'/question/{len(responses)}')
+    if request.form:
+        session[f'{question_num}'] = request.form['answer']
 
-@app.route('/question/<int:question_num>', methods=['POST'])
-def post_question_pages(question_num):
-    responses.append(request.form['answer'])
-    print("redirected")
-    flash('processing...')
-    return redirect(f'/question/{question_num}')
+    try:
+        title = s_survey.title
+        current = s_survey.questions[question_num]
+        question = {
+            'q': current.question,
+            'choices': current.choices,
+        }
 
+        return render_template('questions.html',
+            question_num=question_num,
+            title=title,
+            question=question,
+        )
+    except IndexError:
+        flash("Processing.... Thanks for completing our survey!")
+        return redirect('/thanks')
 
 @app.route('/thanks')
 def thankyou_page():
+    """
+    Route which handles the thank you page.
+    """
     return render_template('thanks.html')

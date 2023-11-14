@@ -3,4 +3,8 @@
 {% block content %}
 <h1>{{ title }}</h1>
 <p>Thanks for completing our Survey!</p>
+<p>Here are your results:</p>
+{% for (q, a)  in session.items() %}
+<p>{{q}}.) {{a}}</p>
+{% endfor %}
 {% endblock %}
