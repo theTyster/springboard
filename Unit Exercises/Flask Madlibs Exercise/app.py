@@ -6,6 +6,7 @@ from stories import Story, stories
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sssssssecretssss🐍'
+app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 debug = DebugToolbarExtension(app)
 
