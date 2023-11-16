@@ -1,0 +1,26 @@
+{% extends 'root.html' %}
+
+{% block content %}
+
+<table>
+{% for row in session['board'] %}
+	<tr>
+		{% for column in row %}
+		<td>
+			{{column}}
+		</td>
+		{% endfor %}
+	</tr>
+{% endfor %}
+</table>
+
+<h1>Make a guess</h1>
+<form>
+	<label for="guess">Word:</label>
+	<input name="guess" type="text">
+</form>
+<p id="score"></p>
+<div id="guessed_words">
+</div>
+
+{% endblock %}
