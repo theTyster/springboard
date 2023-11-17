@@ -4,17 +4,34 @@ import $ from 'jquery'
 
 document.addEventListener("DOMContentLoaded", main)
 
-function main(){
+async function main(){
 	$('form').on('submit', checkForMatch);
+	let timer = 3;
+
+	while (timer >= 0){
+		await new Promise(r=>setTimeout(()=>r(), 1000));
+		$('#timer').text(timer);
+		timer--;
+	}
+	$('input')[0].disabled= true
 }
 
 let score = 0
+const guesses = [];
 
 async function checkForMatch(e){
 	e.preventDefault()
 
 	const data = new FormData($('form')[0]);
-	const word = $('input').val();
+	const guess = $('input').val();
+
+	if (!guesses.includes(guess)){
+		guesses.push(guess);
+	}
+	else{
+		alert("You have already guesssed that word.")
+		return
+	}
 
 	let result = await axios({
 		method: 'post',
@@ -32,7 +49,7 @@ async function checkForMatch(e){
 			alert("That word is not on the board.")
 			break;
 		case 'ok':
-			updateScore(word);
+			updateScore(guess);
 			break;
 	}
 }
