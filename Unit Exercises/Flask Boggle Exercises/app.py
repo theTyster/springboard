@@ -24,9 +24,8 @@ debug = DebugToolbarExtension(app)
 
 @app.route('/', methods =['GET'])
 def start():
-
-    session['board'] = boggle_game.make_board()
     return render_template('start.html')
+
 
 @app.route('/', methods = ['POST'])
 def check_for_match():
@@ -43,3 +42,9 @@ def check_for_match():
     result = jsonify(result)
 
     return result
+
+
+@app.route('/board', methods = ['GET'])
+def board():
+    session['board'] = boggle_game.make_board()
+    return render_template('board.html')
