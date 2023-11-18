@@ -30,14 +30,24 @@ def start():
 @app.route('/', methods = ['POST'])
 def check_for_match():
 
-    guess = request.form['guess']
-    board = session['board']
+    result = {None:None}
 
-    is_match = boggle_game.check_valid_word(board, guess)
+    if request.form.get('guess'):
+        guess = request.form['guess']
+        board = session['board']
+        is_match = boggle_game.check_valid_word(board, guess)
+        result = {'result': str(is_match)}
 
-    result = {
-        'result': str(is_match)
-    }
+    elif request.json['type'] == 'game over':
+        if not session.get('games_played'):
+            session['games_played'] = 1
+            session['games'] = {session['games_played']: request.json}
+            result = session['games']
+        else:
+            session['games_played'] += 1
+            print(session['games'])
+            session['games'].update({str(session['games_played']): request.json})
+            result = session['games']
 
     result = jsonify(result)
 
