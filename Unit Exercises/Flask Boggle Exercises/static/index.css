@@ -1,2 +1,39 @@
 * {margin: 0;} html, body{height: 100%;}
 
+body{
+	background: #333;
+	color: white;
+}
+
+div.container{
+	display: flex;
+}
+
+div.container > *{
+	flex: 1;
+}
+
+input{
+	margin:30px;
+}
+
+h1, h3, p, form, table {
+	text-align:center;
+	margin:0 auto;
+}
+
+h1{
+	margin: 1em auto;
+}
+
+h3{
+	margin: .6em auto;
+}
+
+td, th {
+	padding: 10px;
+}
+
+table{
+	margin: 1em auto;
+}
