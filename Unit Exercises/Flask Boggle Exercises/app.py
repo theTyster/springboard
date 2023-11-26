@@ -4,10 +4,6 @@ from flask import (
     render_template,
     request,
     jsonify,
-    #abort,
-    #redirect,
-    #flash,
-    #make_response,
     session,
     url_for,
 )
@@ -32,20 +28,19 @@ def check_for_match():
 
     result = {None:None}
 
-    if request.form.get('guess'):
+    if request.form and request.form.get('guess'):
         guess = request.form['guess']
         board = session['board']
         is_match = boggle_game.check_valid_word(board, guess)
         result = {'result': str(is_match)}
 
-    elif request.json['type'] == 'game over':
+    elif request.json and request.json['type'] == 'game over':
         if not session.get('games_played'):
             session['games_played'] = 1
             session['games'] = {session['games_played']: request.json}
             result = session['games']
         else:
             session['games_played'] += 1
-            print(session['games'])
             session['games'].update({str(session['games_played']): request.json})
             result = session['games']
 

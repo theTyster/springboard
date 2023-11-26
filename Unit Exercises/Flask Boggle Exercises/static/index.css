@@ -37,3 +37,17 @@ td, th {
 table{
 	margin: 1em auto;
 }
+
+a{
+	text-decoration:none;
+}
+
+button{
+	display:block;
+	margin: 1em auto;
+	border: none;
+	border-radius: 7px;
+	background-color: darkred;
+	color: white;
+	padding: 1em;
+}
