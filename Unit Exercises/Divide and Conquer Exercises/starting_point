@@ -1,0 +1,8 @@
+  let lastIdx = arr.length - 1;
+  let firstIdx = 0;
+  let numCount;
+
+  while(!numCount){
+  let middleIdx = Math.floor((lastIdx + firstIdx)/2);
+
+  }
