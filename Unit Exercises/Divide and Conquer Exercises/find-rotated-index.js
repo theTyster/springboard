@@ -1,5 +1,5 @@
-function findRotatedIndex() {
- 
+const findRotatedIndex = (arr, num)=>{
+  
 }
 
 module.exports = findRotatedIndex
