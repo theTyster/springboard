@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Convert your Moneys 🤑</h1>
+<h1>Convert Foreign Currency 🤑</h1>
 <form name="form-exchange-rates" action="/">
 
 	<label for="convert-from">From </label>
@@ -25,9 +25,9 @@
 
 	<label for="currency-amount">Amount </label>
 	{%if request.args.get('currency-amount')%}
-	<input id="currency-amount" type="number" name="currency-amount" value={{request.args.get('currency-amount')}} min="0.00" step="any">
+	<input id="currency-amount" type="number" name="currency-amount" value={{request.args.get('currency-amount')}} min="0.00" step=".01" pattern="^\d*(\.\d{0,2})?$">
 	{%else%}
-	<input id="currency-amount" type="number" name="currency-amount" value="" min="0.00" step="any">
+	<input id="currency-amount" type="number" name="currency-amount" min="0.00" step=".01" pattern="^\d*(\.\d{0,2})?$">
 	{%endif%}
 	<br>
 	
