@@ -8,7 +8,11 @@
 		<title>Title</title>
 	</head>
 	<body>
-		{%block content%}{%endblock%}
+		<div class="vcontainer"></div>
+		<div class="vcontainer">
+			{%block content%}{%endblock%}
+		</div>
+		<div class="vcontainer"></div>
 	</body>
 	<footer>
 		<script src="{{url_for('static', filename='main.js')}}"></script>
