@@ -25,8 +25,8 @@ class DisplayCurrency{
     this.locale = this.getLanguage();
   }
 
-  // guesses the local language from the browser.
   getLanguage(){
+    // guesses the local language from the browser.
     if (navigator.languages && navigator.languages.length) {
       return navigator.languages[0];
     } else {
@@ -35,6 +35,7 @@ class DisplayCurrency{
   }
 
   withSymbol(){
+    //Displays the currency with the applicable symbol.
     return new Intl
       .NumberFormat(this.locale, 
         { style: 'currency', currency: this.currency })
@@ -44,6 +45,7 @@ class DisplayCurrency{
   }
 
   withoutSymbol(){
+    //Displays the currency without the applicable symbol but formatted as currency.
     return new Intl
       .numberformat(this.locale, 
       { style: 'currency', currency: this.currency })

@@ -19,6 +19,9 @@ debug = DebugToolbarExtension(app)
 
 @app.route('/', methods =['GET'])
 def get_start_page():
+    """
+    The route for app.
+    """
 
     cc = Currency_converter()
     currency_codes = list(cc.list_codes().keys())
@@ -32,8 +35,7 @@ def get_start_page():
 
         if result['success']:
             return render_template('result.html', result=result, currency_codes=currency_codes)
-        else:
-            return render_template('error.html', result=result, currency_codes=currency_codes)
+        return render_template('error.html', result=result, currency_codes=currency_codes)
 
     except KeyError:
         return render_template('start.html', currency_codes=currency_codes)

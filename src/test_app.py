@@ -1,10 +1,17 @@
 from unittest import TestCase
 from app import app
-from currency import Currency_converter
+from currency import CurrencyConverter
 
 class FlaskTests(TestCase):
+    """
+    Tests the flask app.
+    """
 
     def test_get_start(self):
+        """
+        Tests the root page with no query string as a get requests.
+        """
+
         with app.test_client() as flask_client:
             res = flask_client.get('/')
             html = res.get_data(as_text=True)
@@ -15,6 +22,9 @@ class FlaskTests(TestCase):
             self.assertIn('<option value="USD">USD</option>', html)
 
     def test_get_converted(self):
+        """
+        Tests that the app is able to succesfully convert foreign exchanges.
+        """
         with app.test_client() as flask_client:
             res = flask_client.get(
                 '/',
@@ -29,6 +39,9 @@ class FlaskTests(TestCase):
 
 
     def test_get_invalid_currency(self):
+        """
+        Tests that the app is able to successfully handle errors.
+        """
         with app.test_client() as flask_client:
             res = flask_client.get(
                 '/',
