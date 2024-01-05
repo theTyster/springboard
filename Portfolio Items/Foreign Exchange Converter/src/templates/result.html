@@ -1,0 +1,13 @@
+{% extends 'start.html' %}
+
+{%block result%}
+
+{%if result%}
+<h3 id="currency-converted">
+	{{request.args.get('convert-from')}} {{request.args.get('currency-amount')}}
+	is equal to 
+	{{request.args.get('convert-to')}} <span id="conversion-result" style="color:green;">{{result['result']}}</span> 
+</h3>
+{%endif%}
+
+{%endblock%}
