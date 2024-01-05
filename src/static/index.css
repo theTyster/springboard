@@ -1,0 +1,38 @@
+* {margin: 0; font-family: sans; color: white;} 
+html, body{height: 100%; background-color: #444}
+
+h1 { text-align:center; margin-bottom: 1em; }
+
+body{ display: flex; flex-direction: column; }
+
+.vcontainer{ flex:1; } 
+
+form{
+  margin: 0 auto;
+  display: block;
+  width: 300px;
+}
+
+form * {
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  border-radius: 7px;
+  border: none;
+  padding: .3em .5em;
+}
+
+input { color: green; margin-bottom: 1em; }
+select, button{ background-color: darkgreen; color: white; }
+
+select { margin-bottom: 1.3em; }
+
+button { margin: 2em auto; } 
+
+span, p{
+  display: inline-block;
+  margin: 0;
+  padding:0;
+}

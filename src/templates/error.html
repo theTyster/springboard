@@ -1,0 +1,11 @@
+{% extends 'start.html' %}
+
+{%block result%}
+
+{%if result%}
+<h3 id="currency-converted">
+	<span style="color:red">{{result['error']['info']}}</span>
+</h3>
+{%endif%}
+
+{%endblock%}

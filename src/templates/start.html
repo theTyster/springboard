@@ -1,0 +1,39 @@
+{% extends 'root.html' %}
+
+{% block content %}
+
+<h1>Convert Foreign Currency 🤑</h1>
+<form name="form-exchange-rates" action="/">
+
+	<label for="convert-from">From </label>
+	<select id="convert-from" type="text" name="convert-from" maxlength="3">
+		<option value="undefined" hidden selected>--select--</option>
+		{%for code in currency_codes%}
+		<option value="{{code}}"{% if request.args.get('convert-from') == code %}selected="selected"{%endif%}>{{code}}</option>
+		{%endfor%}
+	</select>
+	<br>
+
+	<label for="convert-to">To </label>
+	<select id="convert-to" type="text" name="convert-to" maxlength="3">
+		<option value="undefined" hidden selected>--select--</option>
+		{%for code in currency_codes%}
+		<option value="{{code}}"{% if request.args.get('convert-to') == code %}selected="selected"{%endif%}>{{code}}</option>
+		{%endfor%}
+	</select>
+	<br>
+
+	<label for="currency-amount">Amount </label>
+	{%if request.args.get('currency-amount')%}
+	<input id="currency-amount" type="number" name="currency-amount" value={{request.args.get('currency-amount')}} min="0.00" step=".01" pattern="^\d*(\.\d{0,2})?$">
+	{%else%}
+	<input id="currency-amount" type="number" name="currency-amount" min="0.00" step=".01" pattern="^\d*(\.\d{0,2})?$">
+	{%endif%}
+	<br>
+	
+	<button>Submit</button>
+	<br>
+	{%block result%}{%endblock%}
+</form>
+
+{% endblock %}
