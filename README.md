@@ -1,3 +1,5 @@
-# Forex Converter
+# Springboard Projects
 
-- View the rubric for this assessment [here](https://storage.googleapis.com/hatchways.appspot.com/employers/springboard/student_rubrics/Forex%20Converter%20-%20Student%20Guide.pdf)
+This repo contains all projects and assignments I completed through the Springboard bootcamp.
+
+If you want to view the most noteworthy projects in this repo visit [my portfolio](https://portfolio.thetyster.dev).
