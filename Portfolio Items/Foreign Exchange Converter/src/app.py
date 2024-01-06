@@ -9,7 +9,7 @@ from flask import (
     url_for,
 )
 from flask_debugtoolbar import DebugToolbarExtension
-from currency import Currency_converter
+from currency import CurrencyConverter
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '🤫'
