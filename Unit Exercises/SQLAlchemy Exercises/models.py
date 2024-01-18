@@ -1,34 +1,23 @@
+#! /usr/bin/env python3
 """Models for Blogly."""
-from flask_sqlalchemy import SQLAlchemy
+from utils import SQLAlchemyUtils
 
-db=SQLAlchemy()
+sql = SQLAlchemyUtils()
 
-def connect_db(app):
-    '''
-    Connects python to postgres.
-    '''
-    db.app = app
-    db.init_app(app)
-
-
-# MODELS/SCHEMA BELOW
-
-class Users(db.Model):
+class Users(sql.db.Model):
     '''
     Users postgres model.
     '''
     __tablename__ = 'users'
 
-    id = db.Column(db.Integer,
+    id = sql.db.Column(sql.db.Integer,
                    primary_key=True,
                    autoincrement=True)
 
-    first_name = db.Column(db.String(),
-                     nullable=False,
-                     unique=True)
+    first_name = sql.db.Column(sql.db.String(),
+                     nullable=False)
 
-    last_name = db.Column(db.String(),
-                     nullable=False,
-                     unique=True)
+    last_name = sql.db.Column(sql.db.String(),
+                     nullable=False)
 
-    image_url = db.Column(db.String())
+    image_url = sql.db.Column(sql.db.String())
