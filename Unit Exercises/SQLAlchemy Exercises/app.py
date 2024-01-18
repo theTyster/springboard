@@ -75,7 +75,7 @@ def post_new_users_view():
     sql.commit()
 
     flash("Processing....")
-    return redirect('/users')
+    return redirect('/users', code=301)
 
 
 @app.route('/users/<int:user_id>')
@@ -124,7 +124,7 @@ def post_edit_user_view(user_id):
     sql.commit()
 
     flash('Processing....')
-    return redirect('/users')
+    return redirect('/users', code=301)
 
 @app.route('/users/<int:user_id>/delete')
 def post_delete_user_view(user_id):
@@ -135,4 +135,4 @@ def post_delete_user_view(user_id):
 
     sql.delete(user)
     sql.commit()
-    return redirect('/users')
+    return redirect('/users', code=301)
