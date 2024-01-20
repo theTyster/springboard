@@ -1,0 +1,14 @@
+{%extends 'root.html'%}
+
+{%block content%}
+<h1>Users</h1>
+<ul>
+{%for user in users%}
+<li><a href="/users/{{user[0].id}}">{{user[0].first_name}} {{user[0].last_name}}</a></li>
+{%endfor%}
+</ul>
+{{test}}
+<a href="/users/new">
+	<button>Add User</button>
+</a>
+{%endblock%}

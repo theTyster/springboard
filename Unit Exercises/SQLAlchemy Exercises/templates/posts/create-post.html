@@ -1,0 +1,17 @@
+{%extends 'root.html'%}
+
+{%block content%}
+<form action="/users/{{user.id}}/posts/new" method="POST">
+	<h1>Hi, {{user.first_name}}, what would you like to post?</h1>
+	<label for="blog-title">Title</label>
+	<br>
+	<input type="text" id="blog-title" name="blog-title" placeholder="Todays Thoughts">
+	<br>
+	<label for="blog-content">Content</label>
+	<br>
+	<textarea id="blog-content" name="blog-content" rows="10" cols="50" placeholder="Today I..."></textarea>
+	<br>
+	<button>Submit</button>
+</form>
+<br>
+{%endblock%}
