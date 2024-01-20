@@ -4,10 +4,9 @@
 # See: https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/queries/#legacy-query-interface
 """Blogly application."""
 
-from flask import Flask, request, render_template, redirect, flash, session
+from flask import Flask, request, render_template, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import Users
-from utils import SQLAlchemyUtils
+from models import Users, Posts, sql
 
 # SETUP
 app = Flask(__name__)
@@ -18,12 +17,8 @@ app.config['SECRET_KEY'] = '🤫'
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
-sql = SQLAlchemyUtils()
-
 with app.app_context():
-    sql.connect_db(app)
-    sql.db.create_all()
-
+    sql.start_db(app)
 
 # ROUTES
 @app.route('/')
@@ -42,7 +37,7 @@ def users_view():
     users = sql.query(sql.db.select(Users)).all()
 
     return render_template(
-        'users.html',
+        'users/users.html',
         title='Users',
         users=users
     )
@@ -53,7 +48,7 @@ def get_new_users_view():
     '''
     Displays form for adding new users.
     '''
-    return render_template('create-user.html', title='Create User')
+    return render_template('users/create-user.html', title='Create User')
 
 
 @app.route('/users/new', methods=['POST'])
@@ -83,9 +78,9 @@ def user_view(user_id):
     '''
     Displays user information.
     '''
-    user = sql.get_user(Users, user_id)
+    user = sql.get_row(Users, user_id)
     return render_template(
-        'user.html',
+        'users/user.html',
         title='View User',
         user=user
     )
@@ -96,10 +91,10 @@ def get_edit_user_view(user_id):
     '''
     Display user edit page.
     '''
-    user = sql.get_user(Users, user_id)
+    user = sql.get_row(Users, user_id)
 
     return render_template(
-        'edit-user.html',
+        'users/edit-user.html',
         title='Edit User',
         user=user
     )
@@ -115,7 +110,7 @@ def post_edit_user_view(user_id):
     new_last_name = request.form['last-name']
     new_image_url = request.form['image-url']
 
-    user = sql.get_user(Users, user_id)
+    user = sql.get_row(Users, user_id)
 
     user.first_name = new_first_name
     user.last_name = new_last_name
@@ -126,13 +121,93 @@ def post_edit_user_view(user_id):
     flash('Processing....')
     return redirect('/users', code=301)
 
+
 @app.route('/users/<int:user_id>/delete')
-def post_delete_user_view(user_id):
+def delete_user_view(user_id):
     '''
     Deletes users.
     '''
-    user = sql.get_user(Users, user_id)
+    user = sql.get_row(Users, user_id)
 
     sql.delete(user)
     sql.commit()
     return redirect('/users', code=301)
+
+
+@app.route('/posts/<int:post_id>')
+def view_blogs(post_id):
+    '''
+    Displays blog posts.
+    '''
+    post = sql.get_row(Posts, post_id)
+    return render_template(
+        'posts/post.html',
+        title='Blogly Posts',
+        post=post
+    )
+
+
+@app.route('/users/<int:user_id>/posts/new', methods=['GET'])
+def get_new_user_blogs(user_id):
+
+    user = sql.get_row(Users, user_id)
+
+    return render_template(
+        'posts/create-post.html',
+        title='Create Post',
+        user=user
+    )
+
+
+@app.route('/users/<int:user_id>/posts/new', methods=['POST'])
+def post_new_user_blogs(user_id):
+
+    blog_title = request.form['blog-title']
+    blog_content = request.form['blog-content']
+
+    post = Posts(title=blog_title, content=blog_content, user_id=user_id)
+    sql.insert(post)
+    sql.commit()
+
+    flash('Processing.....')
+    return redirect(f'/users/{user_id}')
+
+
+@app.route('/posts/<int:post_id>/edit', methods=['GET'])
+def get_edit_blogs(post_id):
+
+    post = sql.get_row(Posts, post_id)
+
+    return render_template(
+        'posts/edit-post.html',
+        title='Edit Posts',
+        post=post
+    )
+
+
+@app.route('/posts/<int:post_id>/edit', methods=['POST'])
+def post_edit_blogs(post_id):
+
+    post = sql.get_row(Posts, post_id)
+
+    new_post_title = request.form['blog-title']
+    new_post_content = request.form['blog-content']
+
+    post.title = new_post_title
+    post.content = new_post_content
+    sql.commit()
+
+    flash('Processing.....')
+    return redirect(f'/posts/{post_id}')
+
+
+@app.route('/posts/<int:post_id>/delete')
+def delete_blogs(post_id):
+
+    post = sql.get_row(Posts, post_id)
+    user_id = post.user_id
+    sql.delete(post)
+    sql.commit()
+
+    flash('Processing....')
+    return redirect(f'/users/{user_id}')
