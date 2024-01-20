@@ -13,12 +13,13 @@ class SQLAlchemyUtils:
         self.db=SQLAlchemy()
 
 
-    def connect_db(self, app):
+    def start_db(self, app):
         '''
-        Connects python to postgres.
+        Connects python to postgres and creates database.
         '''
         self.db.app = app
-        return self.db.init_app(app)
+        self.db.init_app(app)
+        return True
 
 
     def query(self, query):
@@ -48,11 +49,11 @@ class SQLAlchemyUtils:
         '''
         return self.db.session.delete(sql_object)
 
-    def get_user(self, model, user_id):
+    def get_row(self, model, row_id):
         '''
         Get's a user from the database.
         '''
-        return self.query(self.db.select(model).filter_by(id=user_id)).first()[0]
+        return self.query(self.db.select(model).filter_by(id=row_id)).first()[0]
 
     def get_fullname(self, model, user_id):
         '''
