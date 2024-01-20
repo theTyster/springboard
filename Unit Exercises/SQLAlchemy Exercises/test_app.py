@@ -5,7 +5,7 @@ Tests App.py
 from unittest import TestCase
 from app import app, sql
 #from utils import SQLAlchemyUtils
-from models import Users
+from models import Users, Posts
 
 class FlaskTests(TestCase):
     """
@@ -31,6 +31,17 @@ class FlaskTests(TestCase):
         sql.commit()
 
         cls.user = sql.query(sql.db.select(Users).filter_by(first_name='test')).first()[0]
+
+        test_post_schema = Posts(
+            title = 'Test Title',
+            content = 'Test Content',
+            user_id = cls.user.id
+        )
+
+        sql.insert(test_post_schema)
+        sql.commit()
+
+        cls.post = sql.query(sql.db.select(Posts).filter_by(title='Test Title')).first()[0]
 
 
     @classmethod
@@ -70,6 +81,18 @@ class FlaskTests(TestCase):
             self.assertEqual(200, res.status_code)
             self.assertIn('<h1>test testerson</h1>', html)
             self.assertIn(f'<a href="/users/{self.user.id}/edit"', html)
+
+
+    def test_posts_page(self):
+        '''
+        Tests that the created test post exists in the database.
+        '''
+        with app.test_client() as flask_client:
+            res = flask_client.get(f'/posts/{self.post.id}')
+            html = res.get_data(as_text=True)
+            self.assertEqual(200, res.status_code)
+            self.assertIn('<h1>Test Title</h1>', html)
+
 
 
     def test_zzz_edit_user_page(self):
