@@ -18,8 +18,7 @@ class SQLAlchemyUtils:
         Connects python to postgres and creates database.
         '''
         self.db.app = app
-        self.db.init_app(app)
-        return True
+        return self.db.init_app(app)
 
 
     def query(self, query):
@@ -49,15 +48,33 @@ class SQLAlchemyUtils:
         '''
         return self.db.session.delete(sql_object)
 
-    def get_row(self, model, row_id):
+
+    def get_rows(self, model, id_, value):
         '''
         Get's a user from the database.
         '''
-        return self.query(self.db.select(model).filter_by(id=row_id)).first()[0]
+        return self.query(self.db.select(model).filter(id_==value))
 
-    def get_fullname(self, model, user_id):
+
+    def get_table(self, model):
         '''
-        Concatenates the users first and last name.
+        Get's all the contents of a table from the database.
         '''
-        user = self.query(self.db.select(model).filter_by(id=user_id)).first()[0]
-        return f'{user.first_name} {user.last_name}'
+        return self.query(self.db.select(model)).all()
+
+    def get_joins(
+            self,
+            table1,
+            table2,
+            junction_table,
+            junction1,
+            junction2
+        ):
+        '''
+        Get's data joined by the two tables.
+        '''
+        return self.db.session.query(table1, table2)\
+                   .select_from(junction_table)\
+                   .join(table1, table1.id == junction1)\
+                   .join(table2, table2.id == junction2)\
+                   .all()
