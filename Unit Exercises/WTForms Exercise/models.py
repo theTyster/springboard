@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
-"""Models for Blogly."""
+"""Models for Pet Adoption Website"""
 from utils import SQLAlchemyUtils
-from datetime import datetime
 
 sql = SQLAlchemyUtils()
 
@@ -21,7 +20,7 @@ class Pets(sql.db.Model):
     species = sql.db.Column(sql.db.String,
                          nullable=False)
 
-    photo_url = sql.db.Column(sql.db.String)
+    image = sql.db.Column(sql.db.String)
 
     age = sql.db.Column(sql.db.Integer)
 

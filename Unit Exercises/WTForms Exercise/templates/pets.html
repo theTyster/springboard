@@ -1,0 +1,26 @@
+{% extends 'root.html' %}
+
+{%block content%}
+
+{%for pet in pets%}
+{%set pet = pet[0]%}
+<img src="{{pet.image}}" alt="{{pet.image}}">
+<p>
+	<b>Name: </b>{{pet.name}}
+</p>
+<p>
+	<b>Species: </b>{{pet.species}}
+</p>
+<p>
+	<b>Age: </b>{{pet.age}}
+</p>
+<p>
+	<b>Notes: </b>{{pet.notes}}
+</p>
+{%if pet.available %}
+<p><b style='color:green'>Available</b></p>
+{%endif%}
+<hr>
+{%endfor%}
+
+{%endblock%}
