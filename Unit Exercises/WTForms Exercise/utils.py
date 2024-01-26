@@ -19,6 +19,8 @@ class SQLAlchemyUtils:
         '''
         self.db.app = app
         return self.db.init_app(app)
+        #self.db.drop_all()
+        #self.db.create_all()
 
 
     def query(self, query):
@@ -30,7 +32,7 @@ class SQLAlchemyUtils:
 
     def insert(self, sql_object):
         '''
-        Wrapper utility for updating SQL data.
+        Wrapper utility for adding SQL data.
         '''
         return self.db.session.add(sql_object)
 
