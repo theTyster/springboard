@@ -1,0 +1,11 @@
+{%extends 'root.html'%}
+
+{%block content%}
+<form action="/tags/new" method="POST">
+	<label for="tag-name">Tag Name</label>
+	<input type="text" id="tag-name" name="tag-name" placeholder="Enter a tag name">
+	<br>
+	<button>Submit</button>
+</form>
+<br>
+{%endblock%}

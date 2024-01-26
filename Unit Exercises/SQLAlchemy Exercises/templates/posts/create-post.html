@@ -10,6 +10,20 @@
 	<label for="blog-content">Content</label>
 	<br>
 	<textarea id="blog-content" name="blog-content" rows="10" cols="50" placeholder="Today I..."></textarea>
+	<hr>
+	{%for tag in tags%}
+	{%if tag in selected_tags%}
+	<p>
+		<input id="tag-id" name="tag-id[]" type="checkbox" value="{{tag.id}}" checked>
+		<label for="tag-id">{{tag.name}}</label>
+	</p>
+	{%else%}
+	<p>
+		<input id="tag-id" name="tag-id[]" type="checkbox" value="{{tag.id}}">
+		<label for="tag-id">{{tag.name}}</label>
+	</p>
+	{%endif%}
+	{%endfor%}
 	<br>
 	<button>Submit</button>
 </form>

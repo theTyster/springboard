@@ -1,0 +1,18 @@
+{% extends 'root.html'%}
+
+{%block content%}
+<h1>{{tag.name}}</h1>
+<p>This tag is included in the following posts:</p>
+{%for post in tag.posts%}
+<ul>
+	<li>
+		<a href="/posts/{{post.id}}">
+			{{post.title}}
+		</a>
+	</li>
+</ul>
+{%endfor%}
+<a href="/tags"><button>Cancel</button></a>
+<a href="/tags/{{tag.id}}/edit"><button>Edit</button></a>
+<a href="/tags/{{tag.id}}/delete"><button>Delete</button></a>
+{%endblock%}

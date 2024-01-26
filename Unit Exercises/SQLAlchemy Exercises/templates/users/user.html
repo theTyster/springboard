@@ -10,7 +10,6 @@
 <a href="/users/{{user.id}}/delete">
 	<button>Delete</button>
 </a>
-
 <h1>Posts</h1>
 {%for post in user.posts%}
 {%if post.user_id == user.id%}
