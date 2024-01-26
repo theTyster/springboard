@@ -150,6 +150,9 @@ def blog_view(post_id):
 
 @app.route('/users/<int:user_id>/posts/new', methods=['GET'])
 def get_new_blog_view(user_id):
+    '''
+    Gets the view for editing posts.
+    '''
 
     user = sql.get_rows(Users, Users.id, user_id).first()[0]
 
@@ -167,6 +170,9 @@ def get_new_blog_view(user_id):
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
 def post_new_user_blog(user_id):
+    '''
+    Receives data from the front end for creating a post.
+    '''
 
     blog_title = request.form['blog-title']
     blog_content = request.form['blog-content']
@@ -212,6 +218,9 @@ def get_edit_blog_view(post_id):
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def post_edit_blog(post_id):
+    '''
+    Recieves data sent from the front end for editing posts.
+    '''
 
     # this post
     post = sql.get_rows(Posts, Posts.id, post_id).first()[0]
@@ -248,6 +257,9 @@ def post_edit_blog(post_id):
 
 @app.route('/posts/<int:post_id>/delete')
 def delete_blog_view(post_id):
+    '''
+    Deletes a post.
+    '''
 
     post = sql.get_rows(Posts, Posts.id, post_id).first()[0]
     user_id = post.user_id
@@ -258,31 +270,39 @@ def delete_blog_view(post_id):
     return redirect(f'/users/{user_id}')
 
 
-# TODO: Add titles.
 @app.route('/tags')
 def tags_view():
+    '''
+    Displays a list of tags in the database.
+    '''
 
     tags = sql.get_table(Tags)
 
-    return render_template('tags/tags.html', tags=tags)
+    return render_template('tags/tags.html', tags=tags, title='Tags')
 
 
 @app.route('/tags/<int:tag_id>')
 def tag_view(tag_id):
+    '''
+    Displays posts a tag is attached to.
+    '''
     tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
     posts = sql.get_table(PostTag)
 
     return render_template(
         'tags/tag.html',
-        title='View User',
         tag=tag,
-        posts=posts
+        posts=posts,
+        title='View Tag'
     )
 
 
 @app.route('/tags/new', methods=['GET'])
 def get_new_tags():
-    return render_template('tags/create-tag.html')
+    '''
+    Returns template for creating tags.
+    '''
+    return render_template('tags/create-tag.html', title='New Tag')
 
 
 @app.route('/tags/new', methods=['POST'])
@@ -306,7 +326,7 @@ def post_new_tags():
 @app.route('/tags/<int:tag_id>/edit', methods=['GET'])
 def get_tags_edit(tag_id):
     tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
-    return render_template('/tags/edit-tag.html', tag=tag)
+    return render_template('/tags/edit-tag.html', tag=tag, title='Edit Tag')
 
 
 @app.route('/tags/<int:tag_id>/edit', methods=['POST'])
@@ -328,6 +348,9 @@ def post_tags_edit(tag_id):
 
 @app.route('/tags/<int:tag_id>/delete')
 def post_tag_delete(tag_id):
+    '''
+    Deletes tag.
+    '''
 
     tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
 

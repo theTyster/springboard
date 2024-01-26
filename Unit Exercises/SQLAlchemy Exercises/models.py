@@ -77,6 +77,9 @@ class Tags(sql.db.Model):
 
 
 class PostTag(sql.db.Model):
+    '''
+    Relationships between Posts and Tags Postgres Model.
+    '''
     __tablename__ = 'post_tag'
     post_id = sql.db.Column(sql.db.Integer,
                             sql.db.ForeignKey('posts.id'),
