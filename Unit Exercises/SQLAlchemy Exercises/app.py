@@ -6,7 +6,7 @@
 
 from flask import Flask, request, render_template, redirect, flash
 from flask_debugtoolbar import DebugToolbarExtension
-from models import Users, Posts, sql
+from models import Users, Posts, Tags, PostTag, sql
 
 # SETUP
 app = Flask(__name__)
@@ -34,12 +34,25 @@ def users_view():
     '''
     Displays Users.
     '''
-    users = sql.query(sql.db.select(Users)).all()
+    users = sql.get_table(Users)
 
     return render_template(
         'users/users.html',
         title='Users',
         users=users
+    )
+
+
+@app.route('/users/<int:user_id>')
+def user_view(user_id):
+    '''
+    Displays user information.
+    '''
+    user = sql.get_rows(Users, Users.id, user_id).first()[0]
+    return render_template(
+        'users/user.html',
+        title='View User',
+        user=user
     )
 
 
@@ -52,7 +65,7 @@ def get_new_users_view():
 
 
 @app.route('/users/new', methods=['POST'])
-def post_new_users_view():
+def post_new_users():
     '''
     Accepts data from the new user form.
     '''
@@ -73,25 +86,12 @@ def post_new_users_view():
     return redirect('/users', code=301)
 
 
-@app.route('/users/<int:user_id>')
-def user_view(user_id):
-    '''
-    Displays user information.
-    '''
-    user = sql.get_row(Users, user_id)
-    return render_template(
-        'users/user.html',
-        title='View User',
-        user=user
-    )
-
-
 @app.route('/users/<int:user_id>/edit', methods=['GET'])
 def get_edit_user_view(user_id):
     '''
     Display user edit page.
     '''
-    user = sql.get_row(Users, user_id)
+    user = sql.get_rows(Users, Users.id, user_id).first()[0]
 
     return render_template(
         'users/edit-user.html',
@@ -101,7 +101,7 @@ def get_edit_user_view(user_id):
 
 
 @app.route('/users/<int:user_id>/edit', methods=['POST'])
-def post_edit_user_view(user_id):
+def post_edit_user(user_id):
     '''
     Accepts edits from the edit page.
     '''
@@ -110,7 +110,7 @@ def post_edit_user_view(user_id):
     new_last_name = request.form['last-name']
     new_image_url = request.form['image-url']
 
-    user = sql.get_row(Users, user_id)
+    user = sql.get_rows(Users, Users.id, user_id).first()[0]
 
     user.first_name = new_first_name
     user.last_name = new_last_name
@@ -127,19 +127,20 @@ def delete_user_view(user_id):
     '''
     Deletes users.
     '''
-    user = sql.get_row(Users, user_id)
+    user = sql.get_rows(Users, Users.id, user_id).first()[0]
 
     sql.delete(user)
     sql.commit()
-    return redirect('/users', code=301)
+    flash('Processing....')
+    return redirect('/users')
 
 
 @app.route('/posts/<int:post_id>')
-def view_blogs(post_id):
+def blog_view(post_id):
     '''
     Displays blog posts.
     '''
-    post = sql.get_row(Posts, post_id)
+    post = sql.get_rows(Posts, Posts.id, post_id).first()[0]
     return render_template(
         'posts/post.html',
         title='Blogly Posts',
@@ -148,24 +149,36 @@ def view_blogs(post_id):
 
 
 @app.route('/users/<int:user_id>/posts/new', methods=['GET'])
-def get_new_user_blogs(user_id):
+def get_new_blog_view(user_id):
 
-    user = sql.get_row(Users, user_id)
+    user = sql.get_rows(Users, Users.id, user_id).first()[0]
+
+    # get all of the tags as a list.
+    tags = sql.get_table(Tags)
+    tags = [tag[0] for tag in tags]
 
     return render_template(
         'posts/create-post.html',
         title='Create Post',
-        user=user
+        user=user,
+        tags=tags
     )
 
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
-def post_new_user_blogs(user_id):
+def post_new_user_blog(user_id):
 
     blog_title = request.form['blog-title']
     blog_content = request.form['blog-content']
+    tags = request.form.getlist('tag-id[]')
 
+    # create the post from data in the form.
     post = Posts(title=blog_title, content=blog_content, user_id=user_id)
+
+    # attach tags as a list.
+    post.tags = [sql.get_rows(Tags, Tags.id, tag_id).first()[0] for tag_id in tags]
+
+    # commit the post to the database.
     sql.insert(post)
     sql.commit()
 
@@ -174,22 +187,54 @@ def post_new_user_blogs(user_id):
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['GET'])
-def get_edit_blogs(post_id):
+def get_edit_blog_view(post_id):
+    '''
+    Gets the edit screen for blog posts.
+    '''
 
-    post = sql.get_row(Posts, post_id)
+    post = sql.get_rows(Posts, Posts.id, post_id).first()[0]
+
+    # get all of the tags as a list.
+    tags = sql.get_table(Tags)
+    tags = [tag[0] for tag in tags]
+
+    # get only the selected tags as a list.
+    selected_tags = post.tags
 
     return render_template(
         'posts/edit-post.html',
         title='Edit Posts',
-        post=post
+        post=post,
+        tags=tags,
+        selected_tags=selected_tags
     )
 
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
-def post_edit_blogs(post_id):
+def post_edit_blog(post_id):
 
-    post = sql.get_row(Posts, post_id)
+    # this post
+    post = sql.get_rows(Posts, Posts.id, post_id).first()[0]
 
+    # this posts tags.
+    post_tags = sql.get_rows(PostTag, PostTag.post_id, post_id).all()
+
+    # submitted tags
+    mod_tags = request.form.getlist('tag-id[]')
+
+    # deletes all previous tags.
+    for row in post_tags:
+        sql.delete(row[0])
+
+    # sets new tags to be whatever was submitted in the form.
+    for tag in mod_tags:
+        new_tag = PostTag(
+            tag_id=int(tag),
+            post_id=post_id
+        )
+        sql.insert(new_tag)
+
+    # modifies the post.
     new_post_title = request.form['blog-title']
     new_post_content = request.form['blog-content']
 
@@ -202,12 +247,92 @@ def post_edit_blogs(post_id):
 
 
 @app.route('/posts/<int:post_id>/delete')
-def delete_blogs(post_id):
+def delete_blog_view(post_id):
 
-    post = sql.get_row(Posts, post_id)
+    post = sql.get_rows(Posts, Posts.id, post_id).first()[0]
     user_id = post.user_id
     sql.delete(post)
     sql.commit()
 
     flash('Processing....')
     return redirect(f'/users/{user_id}')
+
+
+# TODO: Add titles.
+@app.route('/tags')
+def tags_view():
+
+    tags = sql.get_table(Tags)
+
+    return render_template('tags/tags.html', tags=tags)
+
+
+@app.route('/tags/<int:tag_id>')
+def tag_view(tag_id):
+    tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
+    posts = sql.get_table(PostTag)
+
+    return render_template(
+        'tags/tag.html',
+        title='View User',
+        tag=tag,
+        posts=posts
+    )
+
+
+@app.route('/tags/new', methods=['GET'])
+def get_new_tags():
+    return render_template('tags/create-tag.html')
+
+
+@app.route('/tags/new', methods=['POST'])
+def post_new_tags():
+    '''
+    Accepts data from the new tag form.
+    '''
+
+    tag_name = request.form['tag-name']
+    new_tag = Tags(
+        name = tag_name
+    )
+
+    sql.insert(new_tag)
+    sql.commit()
+
+    flash("Processing....")
+    return redirect('/tags', code=301)
+
+
+@app.route('/tags/<int:tag_id>/edit', methods=['GET'])
+def get_tags_edit(tag_id):
+    tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
+    return render_template('/tags/edit-tag.html', tag=tag)
+
+
+@app.route('/tags/<int:tag_id>/edit', methods=['POST'])
+def post_tags_edit(tag_id):
+    '''
+    Accepts edits from the edit tags page.
+    '''
+
+    new_tag_name = request.form['tag-name']
+
+    tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
+
+    tag.name = new_tag_name
+
+    sql.commit()
+    flash('Processing....')
+    return redirect('/tags')
+
+
+@app.route('/tags/<int:tag_id>/delete')
+def post_tag_delete(tag_id):
+
+    tag = sql.get_rows(Tags, Tags.id, tag_id).first()[0]
+
+    sql.delete(tag)
+    sql.commit()
+
+    flash('Processing....')
+    return redirect('/tags')
