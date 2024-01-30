@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en-US">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>{{ title }}</title>
+	</head>
+	<body>
+		<form>
+			<label for="cupcake-flavor">Flavor</label>
+			<br>
+			<input type="text" name="flavor" id="cupcake-flavor" required>
+			<br>
+			<label for="cupcake-size">Size</label>
+			<br>
+			<input type="text" name="size" id="cupcake-size" required>
+			<br>
+			<label for="cupcake-rating">Rating</label>
+			<br>
+			<input type="range" name="rating" id="cupcake-rating" min="1" max="10" step="1" value="5" >
+			<br>
+			<label for="cupcake-image">Image Upload</label>
+			<br>
+			<input type="file" name="image" id="cupcake-image" accept=".jpg,.jpeg,.png"> 
+			<br>
+			<button>Submit</button>
+		</form>
+
+		<div id="cupcakes-list">
+		</div>
+	</body>
+	<footer>
+		<script src="https://cdn.jsdelivr.net/npm/axios"></script>
+		<script src={{url_for('static', filename='main.js')}}> </script>
+	</footer>
+</html>
