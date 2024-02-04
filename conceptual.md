@@ -3,6 +3,7 @@
 Answer the following questions below:
 
 - What is PostgreSQL?
+    PostgreSQL is a Relational databse management system. It allows you to store data...
 
 - What is the difference between SQL and PostgreSQL?
 
