@@ -1,3 +1,5 @@
+# TODO:
+# TEST THAT THE CREATED DATABASE WORKS THE INTENDED WAY.
 """Models for Playlist app."""
 
 from flask_sqlalchemy import SQLAlchemy
