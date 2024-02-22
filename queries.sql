@@ -1,17 +1,12 @@
 
-Make sure you download the starter code and run the following:
+--Make sure you download the starter code and run the following:
 
 ```sh
   psql < movies.sql
   psql movies_db
 ```
 
-```vim
-"scratchpad macro"
-o```sql```jkkA
-```
-
-Using the `movies_db` database, write the correct SQL queries for each of these tasks:
+--Using the `movies_db` database, write the correct SQL queries for each of these tasks:
 
 --1.  The title of every movie.
 ```sql
